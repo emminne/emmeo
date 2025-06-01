@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tỏ tình em meo 💗</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+      color: white;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .text {
+      position: absolute;
+      white-space: nowrap;
+      font-size: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+      animation-name: fall, sway;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      opacity: 0.85;
+    }
+
+    @keyframes fall {
+      0% { top: -10%; opacity: 0; }
+      15% { opacity: 1; }
+      100% { top: 110%; opacity: 0; }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(15px); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+
+  <script>
+    const messages = [
+      "Em meo.",
+      "Có em là điều tuyệt vời nhất trong đời anh.",
+      "Em là tất cả của anh.",
+      "Anh yeu em.",
+      "Anh chỉ muốn bên em be thoi.",
+      "Yeu ngoc mai so 1 the gioi.",
+      "Em meo la cua em min.",
+      "Nhớ em.",
+      "Anh chỉ cần em meo thoi.",
+      "Muốn ôm emm.",
+      "Muốn nghe giọng em mỗi ngày.",
+      "Em be đần.",
+      "Em oiiiii.",
+      "Thích được ở với emmm",
+      "Thuong em nhat tren doi."
+    ];
+
+    const layers = 6;
+    const textsPerLayer = 15;
+    const speeds = [30, 35, 40, 45, 50, 55];
+
+    for (let i = 0; i < layers; i++) {
+      const layer = document.createElement('div');
+      layer.classList.add('layer');
+      layer.style.zIndex = i + 1;
+
+      for (let j = 0; j < textsPerLayer; j++) {
+        const text = document.createElement('div');
+        text.classList.add('text');
+        text.innerText = messages[(i * j + j) % messages.length];
+        text.style.left = Math.random() * 100 + 'vw';
+        text.style.animationDuration = (speeds[i] + Math.random() * 10) + 's, ' + (5 + Math.random() * 5) + 's';
+        text.style.top = Math.random() * -100 + 'vh';
+        layer.appendChild(text);
+      }
+
+      document.body.appendChild(layer);
+    }
+
+    // Vẽ sao bằng canvas
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.5,
+        o: Math.random() * 0.5 + 0.5
+      });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+      for (let star of stars) {
+        ctx.globalAlpha = star.o + Math.sin(Date.now() * 0.002 + star.x) * 0.3;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    drawStars();
+  </script>
+</body>
+</html>
